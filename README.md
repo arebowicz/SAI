@@ -1,3 +1,3 @@
-# Welcome to Simple Algorithms in C Programming Language
+# Welcome to Simple Algorithms Implementations in C Programming Language
 
-My solutions of some small problems. Inspired by codewars.com :)
+There are my solutions of some small problems. Inspired by codewars.com :)
