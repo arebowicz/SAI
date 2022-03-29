@@ -52,6 +52,7 @@ char *decode_morse(const char* morse_code) {
         if(!strcmp(morse[54], letter))  // "SOS"
           j += 2;
         ++j;
+        str[j] = '\0';
         k = 0;
         letter[0] = '\0';
         spaceLetter = true;
