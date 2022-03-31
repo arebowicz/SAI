@@ -4,7 +4,6 @@
 #include <stdio.h>  /* printf */
 
 void initTree(char *);
-void printTreeInSimpleWay();
 void printTreeInBFSOrder();
 void deleteTree();
 
