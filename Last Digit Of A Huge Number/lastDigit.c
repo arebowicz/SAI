@@ -2,9 +2,10 @@
 #include <stdbool.h>
 
 /* https://www.codewars.com/kata/5518a860a73e708c0a000027/ */
-/* tests passed: 889, failed: 2 */
+/* tests passed: 891, failed: 0 */
 
 bool OVERFLOW = false;
+bool OVERFLOW2 = false;
 
 /*  x^y                  */
 /* 0 <= x,y <= 99        */
@@ -13,6 +14,10 @@ int twoLastDigits(int x, int y) {
   if(OVERFLOW == true) {
     y = 100;
     OVERFLOW = false;
+  }
+  if(OVERFLOW2) {
+    y += 100;
+    OVERFLOW2 = false;
   }
   if(y == 0)
     return 1;
@@ -34,12 +39,15 @@ int lastDigit(const unsigned long int *arr, int arr_size) {
     return 1;
   if(arr_size == 1)
     return arr[0]%10;
-  if(arr_size == 2)
-    return twoLastDigits(arr[0]%100, arr[1]%100)%10;
   int i, result;
   result = arr[arr_size-1];
-  for(i=arr_size-1; i>0; --i)
+  for(i=arr_size-1; i>0; --i) {
+    if(arr[i]%100==0 && arr[i]>=100)
+      result = twoLastDigits(arr[i-1]%100, 100);
     result = twoLastDigits(arr[i-1]%100, result%100);
+    if((arr[i-1]/10)%10 == 0 && arr[i-1]>=100)
+      OVERFLOW2 = true;
+  }
   OVERFLOW = false;
   return result%10;
 }
