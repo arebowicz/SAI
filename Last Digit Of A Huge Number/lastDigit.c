@@ -1,13 +1,25 @@
 #include <assert.h>
+#include <stdbool.h>
+
+/* https://www.codewars.com/kata/5518a860a73e708c0a000027/ */
+/* tests passed: 889, failed: 2 */
+
+bool OVERFLOW = false;
 
 /*  x^y                  */
 /* 0 <= x,y <= 99        */
 /* 0 <= return val <= 99 */
 int twoLastDigits(int x, int y) {
+  if(OVERFLOW == true) {
+    y = 100;
+    OVERFLOW = false;
+  }
   if(y == 0)
     return 1;
   if(x == 0 || x == 1)
     return x;
+  if(x % 10 == 0 && y >= 2)
+    OVERFLOW = true;
   int i;
   int result = x; // 0 <= result <= 99
   for(i=0; i<y-1; ++i)
@@ -28,6 +40,7 @@ int lastDigit(const unsigned long int *arr, int arr_size) {
   result = arr[arr_size-1];
   for(i=arr_size-1; i>0; --i)
     result = twoLastDigits(arr[i-1]%100, result%100);
+  OVERFLOW = false;
   return result%10;
 }
 
