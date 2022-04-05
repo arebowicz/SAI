@@ -1,9 +1,9 @@
 /* https://www.codewars.com/kata/561e9c843a2ef5a40c0000a4/ */
+/* TESTS PASSED: 61, FAILED: 0 */
 
 #include <stdbool.h>
 #include <math.h>
 #include <stdlib.h>
-
 #include <stdio.h>
 
 /* NUM_OF_PRIMES = ~~ n / (ln(n) - 1) */
@@ -53,7 +53,7 @@ int binarySearchInPRIMES(int value, enum returnIndex which) {
       return i;
     else
       return i-1;
-  } else if(which == SUCCESOR) {
+  } else {
     if(PRIMES[i] < value)
       return i+1;
     else
@@ -67,13 +67,20 @@ long long *gap(int g, long long m, long long n) {
   long long *result = (long long *) malloc(sizeof(long long)*2);
   result[0] = 0;
   result[1] = 0;
-  result[0] = binarySearchInPRIMES(m, SUCCESOR);
-  result[1] = binarySearchInPRIMES(n, PREDECESSOR);
+  int i = binarySearchInPRIMES(m, SUCCESOR);
+  int end = binarySearchInPRIMES(n, PREDECESSOR);
+  for(; i < end; ++i) {
+    if(PRIMES[i+1] - PRIMES[i] == g) {
+      result[0] = PRIMES[i];
+      result[1] = PRIMES[i+1];
+      break;
+    }
+  }
   return result;
 }
 
 int main(int argc, char *argv[]) {
-  long long *result = gap(0, 11, 23);
+  long long *result = gap(4, 11, 23);
   for(int i = 0; i < 10; ++i)
     printf("%d ", PRIMES[i]);
   printf("\nN = %d\n", N);
