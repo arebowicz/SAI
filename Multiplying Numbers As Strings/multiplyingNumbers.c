@@ -1,4 +1,5 @@
 /* https://www.codewars.com/kata/55911ef14065454c75000062/ */
+/* TESTS PASSED: 116, FAILED: 0 */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,13 +31,22 @@ char *multiply(char *a, char *b) {
       result[i+j] = '0' + (((result[i+j] - '0') + (a[alen-1-i] - '0') * (b[blen-1-j] - '0') + plus) % 10);
       plus = ((tmp + (a[alen-1-i] - '0') * (b[blen-1-j] - '0') + plus) / 10);
     }
+    if(plus > 0)
+      result[i+blen] = plus + '0';
   }
-  if(plus > 0) {
-    result[alen+blen-1] = '0' + plus;
+  if(plus > 0)
     result[alen+blen] = '\0';
-  } else
+  else
     result[alen+blen-1] = '\0';
   int reslen = plus ? alen+blen-1 : alen+blen-2;
+  for(int i = reslen; i > 0; --i)
+    if(result[i] == '0') {
+      result[i] = '\0';
+      --reslen;
+    } else
+      break;
+  if(result[0] == '0' && result[1] == '\0')
+    return result;
   for(int i = 0; i < reslen/2+1; ++i) {
     tmp = result[i];
     result[i] = result[reslen-i];
@@ -47,7 +57,8 @@ char *multiply(char *a, char *b) {
 }
 
 int main(int argc, char *argv[]) {
-  //printf("%s\n", multiply("1", "1"));
-  //printf("%s\n", multiply("123", "1"));
-  printf("%s\n", multiply("123", "123333"));
+  printf("%s\n", multiply("1", "1"));
+  printf("%s\n", multiply("123", "1"));
+  printf("%s\n", multiply("0000001", "3"));
+  /* more test -- codewars.com */
 }
