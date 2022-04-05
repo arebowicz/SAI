@@ -1,5 +1,8 @@
 /* https://www.codewars.com/kata/5672682212c8ecf83e000050/ */
-/* TESTS PASSED: 0, FAILED: 0 */
+/* TESTS PASSED: 11, FAILED: 0 */
+/* THIS SOLUTION IS TOO SLOW */
+/*   "Execution Timed Out"   */
+/* also: what about memory leaks? */
 
 #include <stdlib.h>
 
@@ -74,6 +77,8 @@ void addToList(int value) {
   if(tmp->value < add->value) {
     add->nextItem = tmp->nextItem;
     add->prevItem = tmp;
+    if(tmp->nextItem != NULL)
+      tmp->nextItem->prevItem = add;
     tmp->nextItem = add;
     if(tmp == listTail)
       listTail = add;
@@ -125,9 +130,9 @@ int addElementsToArrays(int n) {
 }
 
 int main(int argc, char *argv[]) {
-  int n = dblLinear(10);
-  n = dblLinear(20);
-  n = dblLinear(30);
-  n = dblLinear(50);
+  int n = dblLinear(99);
+  n = dblLinear(100);
+  n = dblLinear(101);
+  n = dblLinear(100001);
   return 0;
 }
