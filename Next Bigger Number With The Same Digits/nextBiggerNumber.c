@@ -1,12 +1,16 @@
 /* https://www.codewars.com/kata/55983863da40caa2c900004e/ */
 /* BRUTE-FORCE METHOD */
+/* TO OBSERVE SOME DEPENDENCIES AND PROPERTIES */
+/* AND ALSO TO TRAIN PROGRAMMING SKILL */
+/* BASIC TESTS - OK */
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
 
 /* n >= 0 */
-int intLen(int n) {
-  int i = 0;
+int intLen(long long n) {
+  int i = 1;
   while(n/10 > 0) {
     n /= 10;
     ++i;
@@ -22,49 +26,74 @@ int power10(int i) {
   return result;
 }
 
-static int number;
-static int next;
-static int *arrayOfDigits;
+static long long number;
 static int numLen;
+static long long next;
+static int *arrayOfDigits;
 
-void setArrayOfDigits(int array[], int number) {
+void setArrayOfDigits() {
   for(int i = 0; i < numLen; ++i)
-    array[numLen - 1 - i] = (number / power10(i)) % 10;
+    arrayOfDigits[numLen - 1 - i] = (number / power10(i)) % 10;
   return;
 }
 
-void createNumberByRecursion(int actualRecursionLvl, int actualNumber) {
+/* number >= 0 */
+bool isDigitProper(int digit, long long number) {
+  int i = 0;
+  while(number/10 > 0) {
+    if(number % 10 == digit)
+      ++i;
+    number /= 10;
+  }
+  if(number % 10 == digit)
+    ++i;
+  int j = 0;
+  for(int k = 0; k < numLen; ++k)
+    if(arrayOfDigits[k] == digit)
+      ++j;
+  if(i < j)
+    return true;
+  else
+    return false;
+}
+
+void createNumberByRecursion(int actualRecursionLvl, long long actualNumber) {
   if(actualRecursionLvl == numLen) {
     if(intLen(actualNumber) == numLen && actualNumber > number
           && actualNumber < next)
       next = actualNumber;
     return;
   }
-  for(int i = 0; i < numLen; ++i)
-    createNumberByRecursion(actualRecursionLvl + 1,
-                            actualNumber * power10(actualRecursionLvl) + arrayOfDigits[i]);
+  for(int i = 0; i < numLen; ++i) {
+    if(isDigitProper(arrayOfDigits[i], actualNumber))
+      createNumberByRecursion(actualRecursionLvl + 1,
+                                actualNumber * 10 + arrayOfDigits[i]);
+  }
   return;
 }
 
 /* -1 when digits can't be rearranged to form a bigger number */
-int nextBiggerNumber(int n) {
+long long nextBiggerNumber(long long n) {
   number = n;
-  arrayOfDigits = (int *) malloc(sizeof(int) * intLen(number));
+  numLen = intLen(number);
+  arrayOfDigits = (int *) malloc(sizeof(int) * numLen);
   if(arrayOfDigits == NULL)
     return -1;
-  numLen = intLen(number);
-  setArrayOfDigits(arrayOfDigits, number);
+  setArrayOfDigits();
   next = number*10;
   createNumberByRecursion(0, 0);
-  return next;
+  if(next == number*10)
+    return -1;
+  else
+    return next;
 }
 
 int main(int argc, char *argv[]) {
-  printf("1 -> %d\n", nextBiggerNumber(1));
-  printf("23456 -> %d\n", nextBiggerNumber(23456));
-  printf("65432 -> %d\n", nextBiggerNumber(65432));
-  printf("12 -> %d\n", nextBiggerNumber(12));
-  printf("837520347 -> %d\n", nextBiggerNumber(837520347));
-  printf("97997977 -> %d\n", nextBiggerNumber(97997977));
-  printf("324 -> %d\n", nextBiggerNumber(324));
+  printf("1 -> %lld\n", nextBiggerNumber(1));
+  printf("23456 -> %lld\n", nextBiggerNumber(23456));
+  printf("65432 -> %lld\n", nextBiggerNumber(65432));
+  printf("12 -> %lld\n", nextBiggerNumber(12));
+  printf("83752037 -> %lld\n", nextBiggerNumber(83752037));
+  printf("97997977 -> %lld\n", nextBiggerNumber(97997977));
+  printf("324 -> %lld\n", nextBiggerNumber(324));
 }
