@@ -1,6 +1,7 @@
 /* https://www.codewars.com/kata/55983863da40caa2c900004e/ */
 /* BRUTE-FORCE METHOD */
 
+#include <stdlib.h>
 #include <stdio.h>
 
 /* n >= 0 */
@@ -14,19 +15,48 @@ int intLen(int n) {
 }
 
 /* i >= 0 */
-int pow10(int i) {
+int power10(int i) {
   int j = 0, result = 1;
   while(j++ < i)
     result *= 10;
   return result;
 }
 
+static int number;
+static int next;
+static int *arrayOfDigits;
+static int numLen;
+
+void setArrayOfDigits(int array[], int number) {
+  for(int i = 0; i < numLen; ++i)
+    array[numLen - 1 - i] = (number / power10(i)) % 10;
+  return;
+}
+
+void createNumberByRecursion(int actualRecursionLvl, int actualNumber) {
+  if(actualRecursionLvl == numLen) {
+    if(intLen(actualNumber) == numLen && actualNumber > number
+          && actualNumber < next)
+      next = actualNumber;
+    return;
+  }
+  for(int i = 0; i < numLen; ++i)
+    createNumberByRecursion(actualRecursionLvl + 1,
+                            actualNumber * power10(actualRecursionLvl) + arrayOfDigits[i]);
+  return;
+}
+
 /* -1 when digits can't be rearranged to form a bigger number */
 int nextBiggerNumber(int n) {
-  int len = intLen(n);
-  int next;
-
-  return -1;
+  number = n;
+  arrayOfDigits = (int *) malloc(sizeof(int) * intLen(number));
+  if(arrayOfDigits == NULL)
+    return -1;
+  numLen = intLen(number);
+  setArrayOfDigits(arrayOfDigits, number);
+  next = number*10;
+  createNumberByRecursion(0, 0);
+  return next;
 }
 
 int main(int argc, char *argv[]) {
