@@ -1,5 +1,5 @@
 /* https://www.codewars.com/kata/55c6126177c9441a570000cc/ */
-/* TESTS PASSED:, FAILED: */
+/* TESTS PASSED: 106, FAILED: 0 */
 
 
 
@@ -51,6 +51,7 @@ list *listConstructor(const char *str) {
       int i = 0;
       while(*str >= '0' && *str <= '9')
         value[i++] = *str++;
+      --str;
       value[i] = '\0';
       if(tail == NULL) {
         head->value = value;
