@@ -26,6 +26,7 @@ void checkIfEqual(const treeNode *a, const treeNode *b) {
     checkIfEqual(a->left, b->left);
     if(equal)
       checkIfEqual(a->right, b->right);
+    return;
   }
 }
 
