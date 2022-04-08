@@ -1,5 +1,6 @@
 /* https://www.codewars.com/kata/573992c724fc289553000e95/ */
 /* BRUTE-FORCE METHOD */
+/* TESTS PASSED: 113, FAILED: 0 */
 
 
 
@@ -23,6 +24,7 @@ long long *smallest(long long n) {
   min = LLONG_MAX;
   setArrayOfDigits(n);
   findMin();
+  free(arrayOfDigits);
   long long *result = (long long *) malloc(sizeof(long long) * 3);
   result[0] = min;
   result[1] = minIndex;
@@ -55,7 +57,48 @@ void setArrayOfDigits(long long n) {
   return;
 }
 
+long long getNewNumber(int i1, int i2) {
+  long long result = 0LL;
+  for(int i = 0; i < arrLen; ++i) {
+    if(i1 == i2) {
+      result = (result * 10) + arrayOfDigits[i];
+    } else if(i1 < i2) {
+      if(i < i1) {
+        result = (result * 10) + arrayOfDigits[i];
+      } else if(i >= i1 && i < i2) {
+        result = (result * 10) + arrayOfDigits[i+1];
+      } else if(i == i2) {
+        result = (result * 10) + arrayOfDigits[i1];
+      } else {  /* i > i2 */
+        result = (result * 10) + arrayOfDigits[i];
+      }
+    } else {  /* i1 > i2 */
+      if(i < i2) {
+        result = (result * 10) + arrayOfDigits[i];
+      } else if(i == i2) {
+        result = (result * 10) + arrayOfDigits[i1];
+      } else if(i > i2 && i <= i1) {
+        result = (result * 10) + arrayOfDigits[i-1];
+      } else {  /* i > i1 */
+        result = (result * 10) + arrayOfDigits[i];
+      }
+    }    
+  }
+  return result;
+}
+
 void findMin() {
+  int i, j;
+  long long tmp;
+  for(i = 0; i < arrLen; ++i) {
+    for(j = 0; j < arrLen; ++j) {
+      if((tmp = getNewNumber(i, j)) < min) {
+        min = tmp;
+        minIndex = i;
+        insertIndex = j;
+      }
+    }
+  }
   return;
 }
 
