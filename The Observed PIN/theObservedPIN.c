@@ -1,5 +1,5 @@
 /* https://www.codewars.com/kata/5263c6999e0f40dee200059d/ */
-/* TESTS PASSED: , FAILED: */
+/* TESTS PASSED: 210, FAILED: 0 */
 
 
 
@@ -10,7 +10,7 @@ int **digits = NULL;
 void init() {
   digits = (int **) malloc(sizeof(int *) * 10);
   digits[0] = (int *) malloc(sizeof(int) * 2);
-  digits[0][0] = 1; digits[0][1] = 8;
+  digits[0][0] = 2; digits[0][1] = 8; digits[0][2] = 0;
   digits[1] = (int *) malloc(sizeof(int) * 4);
   digits[1][0] = 3; digits[1][1] = 1; digits[1][2] = 2; digits[1][3] = 4;
   digits[2] = (int *) malloc(sizeof(int) * 5);
@@ -63,7 +63,9 @@ const char **getPins(const char *observed, size_t *count) {
   return (const char **) pins;
 }
 
+/* TO DO */
 void freePins(const char **pins, size_t count) {
+  /* TO DO */
   return;
 }
 
