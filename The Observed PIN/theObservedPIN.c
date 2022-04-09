@@ -5,9 +5,68 @@
 
 #include <stdlib.h>
 
+int **digits;
+
+void init() {
+  digits = (int **) malloc(sizeof(int *) * 10);
+  digits[0] = (int *) malloc(sizeof(int) * 2);
+  digits[0][0] = 1; digits[0][1] = 8;
+  digits[1] = (int *) malloc(sizeof(int) * 4);
+  digits[1][0] = 3; digits[1][1] = 1; digits[1][2] = 2; digits[1][3] = 4;
+  digits[2] = (int *) malloc(sizeof(int) * 5);
+  digits[2][0] = 4; digits[2][1] = 1; digits[2][2] = 2; digits[2][3] = 3; digits[2][4] = 5;
+  digits[3] = (int *) malloc(sizeof(int) * 4);
+  digits[3][0] = 3; digits[3][1] = 2; digits[3][2] = 3; digits[3][3] = 6;
+  digits[4] = (int *) malloc(sizeof(int) * 5);
+  digits[4][0] = 4; digits[4][1] = 1; digits[4][2] = 4; digits[4][3] = 5; digits[4][4] = 7;
+  digits[5] = (int *) malloc(sizeof(int) * 6);
+  digits[5][0] = 5; digits[5][1] = 2; digits[5][2] = 4; digits[5][3] = 5; digits[5][4] = 6; digits[5][5] = 8;
+  digits[6] = (int *) malloc(sizeof(int) * 5);
+  digits[6][0] = 4; digits[6][1] = 3; digits[6][1] = 5; digits[6][1] = 6; digits[6][1] = 9;
+  digits[7] = (int *) malloc(sizeof(int) * 4);
+  digits[7][0] = 3; digits[7][1] = 4; digits[7][1] = 7; digits[7][1] = 8;
+  digits[8] = (int *) malloc(sizeof(int) * 6);
+  digits[8][0] = 5; digits[8][1] = 5; digits[8][2] = 7; digits[8][3] = 8; digits[8][4] = 9; digits[8][5] = 0;
+  digits[9] = (int *) malloc(sizeof(int) * 4);
+  digits[9][0] = 3; digits[9][1] = 6; digits[9][2] = 8; digits[9][3] = 9;
+  return;
+}
+
 const char **getPins(const char *observed, size_t *count) {
+  init();
   *count = 1;
-  return NULL;
+  const char *tmp = observed;
+  int n = 0;
+  while(*tmp != '\0') {
+    *count *= digits[*tmp++ - '0'][0];
+    ++n;
+  }
+  char **pins = (char **) malloc(sizeof(char *) * *count);
+  for(int i = 0; i < *count; ++i)
+    pins[i] = (char *) malloc(sizeof(char) * (n + 1));
+  tmp = observed;
+  const char *tmp2;
+  int i, j, k, l, m, o, p, r;
+  for(j = 0; j < n; ++j) {
+    m = 1; tmp2 = observed;
+    for(l = 0; l < j; ++l)
+      m *= digits[*tmp2++ - '0'][0];
+    p = 1; ++tmp2;
+    while(l++ < n)
+      p *= digits[*tmp2++ - '0'][0];
+    r = 0;
+    for(k = 0; k < m; ++k) {
+      for(i = k*p; i < (k+1)*p; ++i) {
+        for(o = 1; o <= digits[*tmp - '0'][0]; ++o) {
+          for(r = 0; r < p; ++r) {
+            pins[i++][j] = digits[*tmp - '0'][o] + '0';
+          }
+        }
+      }
+    }
+    ++tmp;
+  }
+  return (const char **) pins;
 }
 
 void freePins(const char **pins, size_t count) {
@@ -67,8 +126,10 @@ void test(const char *observed, const size_t expectedCount, const char *expected
   assert(count == expectedCount);
   bubblePINsSort(pins, count);
   for(size_t i = 0; i < count; ++i)
-    if(compareIfEqual(pins[i], expectedPins[i]) == false)
+    if(compareIfEqual(pins[i], expectedPins[i]) == false) {
       printf("Error. %zuth PIN expected to be %s but got %s\n", expectedPins[i], pins[i]);
+      assert(false);
+    }
   freePins(pins, count); pins = NULL; count = 0;
 }
 
