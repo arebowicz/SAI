@@ -2,17 +2,20 @@
 /* TESTS PASSED: 10, FAILED: ? */
 /* TIME-OUT... */
 /* FOR "DOUBLE" (NOT "LONG DOUBLE") TESTS PASSED: ~50 */
+/* SO: POW FUNCTION IS VERY SLOW */
+/* IT'S BETTER TO CREATE AN ARRAY TO LIMIT POW() FUNCTION CALLS */
+/* (CALL POW() ONLY AT THE VERY BEGINNING OF THE PROCESS, AS MANY TIMES AS NEEDED)  */
 
 
 
 #include <math.h>
 
 double doubles(int maxk, int maxn) {
-  long double sum = 0.0;
+  double sum = 0.0;
   for(int k = 1; k <= maxk; ++k)
     for(int n = 1; n <= maxn; ++n)
-      sum += ((1 / (long double) k) * powl((long double) n + 1, (long double) -2 * k));
-  return (double) sum;
+      sum += ((1 / (double) k) * pow(n + 1, -2 * k));
+  return sum;
 }
 
 
